@@ -4,14 +4,17 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start":"nodemon app.js",
+    "start": "nodemon app.js",
+    "debug": "nodemon --inspect-brk app.js",
+    "play": "nodemon ../playground/arrowFunc.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.10",
+    "yargs": "^11.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.17.4"
