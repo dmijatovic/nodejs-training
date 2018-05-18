@@ -1,0 +1,27 @@
+{
+  "name": "todoApi",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "mongo:run": "docker run --name=mongodb-1 -p=27017:27017 -v=/home/dusan/test/node/udemy/todoApi/mongodb/data:/data/db -d mongo",
+    "mongo:link": "docker run --name=mongodb-1 -v=/home/dusan/test/node/udemy/todoApi/mongodb/data:/data/db -d mongo",
+    "mongo:start": "docker start mongodb-1",
+    "mongo:stop": "docker stop mongodb-1",
+    "mongo:remove": "docker rm mongodb-1",
+    "mongo:man:run": "docker run --link=mongodb-1:mongo -p=8081:8081 --name=\"mongo-express-1\" mongo-express",
+    "mongo:man:start": "docker start mongo-express-1",
+    "mongo:man:stop": "docker stop mongo-express-1",
+    "mongo:man:rm": "docker rm mongo-express-1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^3.1.0-beta4"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.3"
+  }
+}
