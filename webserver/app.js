@@ -36,11 +36,13 @@ app.use((req,res,next)=>{
   next();
 });
 
-//maintanance
+//maintanance middleware
+//used to block complete site/app
+/*
 app.use((req,res,next)=>{
   res.render('maintanance.hbs');
 });
-
+*/
 
 //-------------------------------------
 //ROUTES - after middleware 
@@ -48,14 +50,12 @@ app.use((req,res,next)=>{
 //define static folder
 app.use(express.static('./public'));
 
-
 app.get('/home', (req, res) =>{
   res.render('home.hbs',{
     pageTitle: 'Home page',
     pageBody:"Welcome to home page!"
   })
 });
-
 
 app.get('/about', (req, res) =>{
   res.render('about.hbs',{
