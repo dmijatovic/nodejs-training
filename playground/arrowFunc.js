@@ -22,7 +22,7 @@ let user = {
     console.log(`Hi. I am ${this.name}`);
   },
   /**
-   * Function on object bound keywoard this to parent object
+   * Alternative function syntax on object bound keywoard this to parent object
    * It also has arguments of regulair function 
    */
   sayHiAlt(){
