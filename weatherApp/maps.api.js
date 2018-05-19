@@ -1,6 +1,8 @@
 const fetch = require('node-fetch');
 
-let baseUrl =  "https://maps.googleapis.com/maps/api/geocode/json";
+let baseUrl =  "https://maps.googleapis.com/maps/api/geocode/json?",
+    //add your own key here - thisone is not valid
+    key = "key=AIzaSyBMC7ieJlO5kUSBc0oJygQ64oTHu5H8k0o";
 
 module.exports = {
   /**
@@ -8,7 +10,7 @@ module.exports = {
    * @param address:string  
    */
   getLocationInfo(address){
-    let url = baseUrl + `?address="${address}"`;
+    let url = baseUrl + key + `&address="${address}"`;
     
     return fetch(url,{
         method:'GET',
