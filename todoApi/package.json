@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon api",
     "mongo:run": "docker run --name=mongodb-1 -p=27017:27017 -v=/home/dusan/test/node/udemy/todoApi/mongodb/data:/data/db -d mongo",
     "mongo:link": "docker run --name=mongodb-1 -v=/home/dusan/test/node/udemy/todoApi/mongodb/data:/data/db -d mongo",
     "mongo:start": "docker start mongodb-1",
@@ -13,7 +13,9 @@
     "mongo:man:run": "docker run --link=mongodb-1:mongo -p=8081:8081 --name=\"mongo-express-1\" mongo-express",
     "mongo:man:start": "docker start mongo-express-1",
     "mongo:man:stop": "docker stop mongo-express-1",
-    "mongo:man:rm": "docker rm mongo-express-1"
+    "mongo:man:rm": "docker rm mongo-express-1",
+    "test": "mocha tests/**/*.test.js",
+    "test:watch": "nodemon --exec 'npm test'"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +27,9 @@
     "mongoose": "^5.1.2"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.3"
+    "expect": "^22.4.3",
+    "mocha": "^5.2.0",
+    "npm-run-all": "^4.1.3",
+    "supertest": "^3.1.0"
   }
 }
