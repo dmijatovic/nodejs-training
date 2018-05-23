@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
 const { mongoose } = require ('./mongodb/mongoose');
 const { ToDo, User } = require ('./mongodb/models');
+//set api port
+const port = process.env.PORT || 3000;
 //set express
 let api = express();
 //use body parser middleware
@@ -62,31 +64,10 @@ api.get('/todos/:id', (req, res)=>{
   }
 });
 
-//delete todo by id
-api.delete('/todos/:id',(req,res)=>{
-   //get id from params
-  let id = req.params.id;
-  if (ObjectID.isValid(id)){
-    ToDo.findByIdAndRemove(id).then((todo)=>{
-      if(todo){
-        res.send({
-          data: todo
-        });
-      }else{
-        res.status(404).send({
-          error:"Id not found"
-        });    
-      }
-    });
-  }else{
-    res.status(404).send({
-      error:"Id not valid"
-    });
-  } 
-});
 
-api.listen(3000,()=>{
-  console.log("Started on 3000");
+
+api.listen(port,()=>{
+  console.log(`Started on ${port}`);
 });
 
 module.exports = {api};

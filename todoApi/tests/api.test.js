@@ -108,3 +108,80 @@ describe("GET /todos",()=>{
       })
   })
 });
+
+describe("GET /todos/:id",()=>{
+
+  it ('should return 404 when invalid id provided',(done)=>{
+    //done();
+    request(api)
+      .get('/todos/12345')
+      .expect(404)
+      .end((err,resp)=>{
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      });
+  });
+
+  it ('should return todo data when valid id provided',(done)=>{
+    ToDo.findOne().then((data)=>{
+      var id = data._id;
+      request(api)
+      .get(`/todos/${id}`)
+      .expect(200)
+      .expect((resp)=>{
+        //console.log(resp.body);
+        expect(resp.body.data.text).toBe(data.text);
+      })
+      .end((err,resp)=>{
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      });
+    });
+  });
+
+});
+
+
+describe("DELETE /todos/:id",()=>{
+
+  it ('should return 404 when invalid id provided',(done)=>{
+    //done();
+    request(api)
+      .delete('/todos/12345')
+      .expect(404)
+      .end((err,resp)=>{
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      });
+  });
+
+  it ('should DELETE todo when valid id provided',(done)=>{
+    ToDo.findOne().then((data)=>{
+      var id = data._id;
+      request(api)
+      .delete(`/todos/${id}`)
+      .expect(200)
+      .expect((resp)=>{
+        //console.log(resp.body);
+        expect(resp.body.data.text).toBe(data.text);
+      })
+      .end((err,resp)=>{
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      });
+    });
+  });
+
+});

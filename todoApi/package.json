@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start":"node heroku.js",
     "dev": "nodemon api",
     "mongo:run": "docker run --name=mongodb-1 -p=27017:27017 -v=/home/dusan/test/node/udemy/todoApi/mongodb/data:/data/db -d mongo",
     "mongo:link": "docker run --name=mongodb-1 -v=/home/dusan/test/node/udemy/todoApi/mongodb/data:/data/db -d mongo",
@@ -16,6 +17,9 @@
     "mongo:man:rm": "docker rm mongo-express-1",
     "test": "mocha tests/**/*.test.js",
     "test:watch": "nodemon --exec 'npm test'"
+  },
+  "engines":{
+    "node":"8.11.2"
   },
   "keywords": [],
   "author": "",

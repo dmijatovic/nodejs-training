@@ -64,4 +64,12 @@ This is front-end [mongo db management tool](https://hub.docker.com/_/mongo-expr
 
 ```
 
+# Heroku
+TO deploy:
+
+- define PORT in your server script. heroku.js in this case
+- add node version in packages.json prop "engines"
+- add mongoDB addon into your heroku project:
+
+
 
