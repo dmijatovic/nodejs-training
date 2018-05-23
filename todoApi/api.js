@@ -1,9 +1,23 @@
+//get environment variables
+let env = process.env.NODE_ENV || 'development';
+
+//set environements 
+if (env==='development'){
+  //development environement with local mongodb
+  process.env.PORT = 3000;
+  process.env.MONGODB_URI = "mongodb://localhost:27017/TodoApp";
+}else if (env==='test'){
+  //test environement using mongodb test collection
+  process.env.PORT = 3000;
+  process.env.MONGODB_URI = "mongodb://localhost:27017/TodoAppTest";
+}
+
 const express = require ('express');
 const bodyParser = require('body-parser');
-
 const { ObjectID } = require('mongodb');
 const { mongoose } = require ('./mongodb/mongoose');
 const { ToDo, User } = require ('./mongodb/models');
+
 //set express
 let api = express();
 //use body parser middleware
@@ -84,6 +98,52 @@ api.delete('/todos/:id',(req,res)=>{
     });
   } 
 });
+
+//update todo
+api.patch('/todos/:id',(req,res)=>{
+  let id = req.params.id,
+    body = {
+      completed: req.body['completed'] || false,
+      text: req.body['text']
+    };
+
+  if (ObjectID.isValid(id)){
+    //debugger
+    if (body.completed){
+      body.completedAt = new Date().getTime();
+    } else {
+      body.completed = false;
+      body.completedAt = null;
+    }
+    //update todo item
+    ToDo.findByIdAndUpdate(id,{
+      $set: body
+    },{
+      new: true
+    })
+    .then((todo)=>{
+      //debugger 
+      if (todo){
+        res.send({
+          data: todo
+        });
+      }else{
+        res.status(400).send({
+          error: "404 - id not valid"
+        });
+      }
+    },(e)=>{
+      res.status(404).send({
+        error: "400 - update failed"
+      });
+    }); 
+  }else{
+    res.status(404).send({
+      error:"Id not valid"
+    });
+  }
+});
+
 
 api.listen(3000,()=>{
   console.log("Started on 3000");

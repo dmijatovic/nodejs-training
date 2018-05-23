@@ -183,5 +183,48 @@ describe("DELETE /todos/:id",()=>{
       });
     });
   });
+});
 
+
+describe("PATCH /todos/:id",()=>{
+
+  it ('should return 404 when invalid id provided',(done)=>{
+    //done();
+    request(api)
+      .patch('/todos/12345')
+      .expect(404)
+      .end((err,resp)=>{
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      });
+  });
+
+  it ('should UPDATE todo when valid id provided',(done)=>{
+    
+    let body={completed:true, text:"This is just test"};
+    
+    ToDo.findOne().then((data)=>{
+      var id = data._id;
+      request(api)
+      .patch(`/todos/${id}`)
+      .send(body)
+      .expect(200)
+      .expect((resp)=>{
+        //console.log(resp.body);
+        expect(resp.body.data.text).toBe(body.text);
+        expect(resp.body.data.completed).toBe(true);
+        expect(resp.body.data.completedAt).toBeGreaterThan(1000000);
+      })
+      .end((err,resp)=>{
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      });
+    });
+  });
 });
