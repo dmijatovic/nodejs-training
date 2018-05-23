@@ -64,12 +64,26 @@ This is front-end [mongo db management tool](https://hub.docker.com/_/mongo-expr
 
 ```
 
-# Heroku
+## Heroku
 TO deploy:
 
 - define PORT in your server script. heroku.js in this case
 - add node version in packages.json prop "engines"
 - add mongoDB addon into your heroku project:
 
+
+## Mongoose email validation
+
+See [docs](http://mongoosejs.com/docs/validation.html) and install validator lib `npm i validator --save`
+
+
+## Authentication
+
+### Hashing
+
+SHA256 used from lib crypto-js module. See example in playground/hashing.js
+
+### JWT
+Using jwt for validation
 
 

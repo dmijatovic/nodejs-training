@@ -144,6 +144,27 @@ api.patch('/todos/:id',(req,res)=>{
   }
 });
 
+// create user
+api.post('/users',(req,res)=>{
+  let body = {
+    email: req.body.email,
+    password: req.body.password,
+  }
+  debugger 
+  let user = new User(body);
+  user.save().then((data)=>{
+    debugger 
+    res.send({
+      data: data
+    })
+  },(err)=>{
+    res.status(500).send({
+      error: "Failed to create user: " + err
+    });
+  });
+
+});
+
 
 api.listen(3000,()=>{
   console.log("Started on 3000");
