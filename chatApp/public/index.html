@@ -13,6 +13,24 @@
   
   <p> Welcome to chatMASTER! </p>
 
+  <div class="message-body">
+    <textarea rows="4" cols="50"
+      id="chat-body" 
+      defaultValue=""
+      value="">
+    </textarea>
+  </div>
+  <div class="message-nav">
+    <button id="submit-chat">Send</button>
+  </div>
+
+  <section class="messages-area">
+
+    <ol id="message-list">
+    </ol>
+
+  </section>
+
 <script src="socket.io/socket.io.js"></script>
 <script src="index.js"></script>
 

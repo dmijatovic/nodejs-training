@@ -25,24 +25,29 @@ io.on('connection',(socket)=>{
   console.log("Client...connected");
 
   //great new user
-  socket.emit("newMessage",{
-    from:'admin@chatMaster.com',
-    body:'Welcome to chatMASTER'
-  });
+  socket.emit("newMessage",
+    utils.generateMessage({
+      from:'admin@chatMaster.com',
+      body:'Welcome to chatMASTER'
+    })
+  );
 
-  socket.broadcast.emit("newMessage",{
+  socket.broadcast.emit("newMessage",
+    utils.generateMessage({
     from: 'admin@chatMASTER.com',
     body: 'New user joined chat :-)'
-  });
+    })
+  );
 
 
-  socket.on('createMessage',(data)=>{
+  socket.on('createMessage',(data, callback)=>{
 
     console.log("Share message...", data);
     
     //create message with dateTimeStamp
     let message=utils.generateMessage(data)
 
+    callback({status:200, message:'Thi is completely OK!'});
     //emit message to all clients;
     io.emit('newMessage', message);
     

@@ -13,4 +13,11 @@ ChatMASTER app is node.js and [socket.io](https://socket.io/docs/) app.
 
   # run backend server of the app using nodemon
   npm run server
+
 ```
+
+
+## Socket.io
+
+Acknowledgment, via callback. For validating data
+
