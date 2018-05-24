@@ -184,7 +184,7 @@ api.post('/login',(req,res)=>{
     email: req.body.email,
     password: req.body.password
   }, userFound;
-  debugger
+  //debugger
   //find user by credentials
   User.findByCredentials(body)
   .then((user)=>{
@@ -208,6 +208,22 @@ api.post('/login',(req,res)=>{
   });
 });
 
+//LOGOUT point
+//removes token from user mongodb
+api.delete("/logout",auth,(req,res)=>{
+  req.user.removeToken(req.token)
+  .then(()=>{
+    res.status(200).send({
+      data: "User logged out!"
+    });
+  })
+  .catch((err)=>{
+    res.status(500).send({
+      error:"Logout failed",
+      data: err
+    })
+  });
+})
 
 api.listen(3000,()=>{
   console.log("Started on 3000");

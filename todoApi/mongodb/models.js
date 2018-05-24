@@ -80,7 +80,36 @@ UserSchema.methods.generateAuthToken = function(){
   });
 };
 
-// custom static method on User schema
+
+
+//overwrite default toJSON schema function with custom
+//one in order to control properties extracted
+//here we send only _id and email back from mongodb
+UserSchema.methods.toJSON = function(){
+  let user = this;
+  //let userObject = user.toObject();
+  return {
+    _id: user._id,
+    email: user.email,
+    //password: user.password
+  }
+};
+
+//remove token at logout
+UserSchema.methods.removeToken = function(token){
+  let user = this;
+  //$pull is going to
+  //remove token from the array of tokens
+  return user.update({
+    $pull:{
+      tokens:{
+        token: token
+      }
+    }
+  });
+};
+
+// custom static methods on User schema
 // find user by token
 UserSchema.statics.findByToken = function(token){
   let User = this;
@@ -164,20 +193,6 @@ UserSchema.pre('save',function(next){
     next();
   }
 });
-
-
-//overwrite default toJSON schema function with custom
-//one in order to control properties extracted
-//here we send only _id and email back from mongodb
-UserSchema.methods.toJSON = function(){
-  let user = this;
-  //let userObject = user.toObject();
-  return {
-    _id: user._id,
-    email: user.email,
-    //password: user.password
-  }
-}
 
 //mpngoose User model
 const User = mongoose.model('User', UserSchema);
