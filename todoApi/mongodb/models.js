@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
+const secret="abc123";
 
 //mongoose todo model
 const ToDo = mongoose.model('ToDo',{
@@ -64,7 +65,7 @@ const UserSchema = new mongoose.Schema({
 // append custom methods to schema
 // no arrow function: to bind to parent
 UserSchema.methods.generateAuthToken = function(){
-  let user = this, access = 'auth', secret="abc123";
+  let user = this, access = 'auth';
   //create new token  
   let token = jwt.sign({
       _id: user._id.toHexString(), access
@@ -77,6 +78,33 @@ UserSchema.methods.generateAuthToken = function(){
     return token;
   });
 };
+
+// custom static method on User schema
+// find user by token
+UserSchema.statics.findByToken = function(token){
+  let User = this;
+  let decoded;
+  //debugger
+  return new Promise((res,rej)=>{
+    try{
+      //decode jwt token
+      decoded = jwt.verify(token, secret);
+      //use id from decoded jwt to find user in db
+      let user = User.findOne({
+        '_id': decoded._id,
+        'tokens.token': token,
+        'tokens.access': 'auth'
+      });
+      //return user 
+      res(user);
+    }catch(e){
+      //reject with error
+      //mostly invalid token from jwt.verify
+      rej(e);
+      //return null;
+    }
+  });
+}
 
 //overwrite default toJSON schema function with custom
 //one in order to control properties extracted

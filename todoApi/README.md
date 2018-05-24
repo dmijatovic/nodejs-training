@@ -84,6 +84,8 @@ See [docs](http://mongoosejs.com/docs/validation.html) and install validator lib
 SHA256 used from lib crypto-js module. See example in playground/hashing.js
 
 ### JWT
-Using jwt for validation
+Using jwt for validation `npm i --save jsonwentoken
+
+### Private routes with Express & middleware
 
 

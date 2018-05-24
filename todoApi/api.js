@@ -17,6 +17,7 @@ const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
 const { mongoose } = require ('./mongodb/mongoose');
 const { ToDo, User } = require ('./mongodb/models');
+const auth = require('./middleware/authenticate');
 
 //set express
 let api = express();
@@ -169,6 +170,13 @@ api.post('/users',(req,res)=>{
   });
 });
 
+//Private user page
+api.get('/users/me', auth, (req,res)=>{
+  //using auth middleware we extract user 
+  //and append it to request in user prop
+  //we also append token property
+  res.send(req.user);
+});
 
 api.listen(3000,()=>{
   console.log("Started on 3000");
