@@ -1,4 +1,5 @@
 
+# Docker containers
 
 ## Docker MongoDB
 
@@ -64,29 +65,21 @@ This is front-end [mongo db management tool](https://hub.docker.com/_/mongo-expr
 
 ```
 
-## Heroku
-TO deploy:
-
-- define PORT in your server script. heroku.js in this case
-- add node version in packages.json prop "engines"
-- add mongoDB addon into your heroku project:
-
+# Authentication
 
 ## Mongoose email validation
 
 See [docs](http://mongoosejs.com/docs/validation.html) and install validator lib `npm i validator --save`
 
 
-## Authentication
-
-### Hashing
+## Hashing
 
 SHA256 used from lib crypto-js module. See example in playground/hashing.js
 
-### JWT
-Using jwt for validation `npm i --save jsonwentoken
+## JWT
+Using jwt for validation `npm i --save jsonwentoken`
 
-### Private routes with Express using custom middleware
+## Private routes with Express using custom middleware
 See middleware/authenticate.js for the code.
 
 Folowing steps implemented:
@@ -95,18 +88,18 @@ Folowing steps implemented:
  - toJSON default method om user schema is overwritten to limit properties send back to front-end.
  - authenticate middleware function created to authenticate and append user and token objects to request. So the info is passed further as props user and token of request.
 
-### Saving encripted passwords with bcryptjs
+## Saving encripted passwords with bcryptjs
 
 The passwords are saved hased using [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 
-Saving hashed password is done using [mongoose middleware](http://mongoosejs.com/docs/middleware.html) 
+Saving hashed password is done using [mongoose middleware](http://mongoosejs.com/docs/middleware.html).
 See User model UserSchema.pre('save',...)
 
 
 # Testing
-All test are in tests folder. To test follwing libs are used:
+All test are in tests folder. Following libs are used:
 
-- [expect](https://github.com/mjackson/expect): for assertions
+- [expect](https://github.com/mjackson/expect): for assertions. This lib is donated to [JEST](https://jest-bot.github.io/jest/docs/expect.html). So use JEST documentation for using proper operators.
 - [supertest](https://www.npmjs.com/package/supertest): for making requests
 
 
@@ -131,19 +124,41 @@ In the config folder we have config.js and config.json. Config.json contains env
 
 ``` 
 
-## Heroku env variables
+# Heroku
 
-These are Heroku specific config variables. Can be used for setting up JWT_SECRET etc.
-When deploying on Heroku one should set JWT_SECRET variable to let this api working properly.
+TO deploy:
+
+- define PORT in your server script. heroku.js in this case
+- add node version in packages.json prop "engines"
+- add mongoDB addon into your heroku project:
+
+## Heroku variables
+
+Heroku specific config variable should be used for setting up JWT_SECRET etc. When deploying on Heroku one should set JWT_SECRET variable to let this api working properly.
 
 ```bash
   # set env variable on heroku
-  heroku config:set NAME = "your value here"
+  heroku config:set JWT_SECRET = "your value here"
   # view config variables
   heroku config
+  
   # remove variable
-  heroku config:unset NAME
+  # heroku config:unset NAME
 
 ```
 
+# Postman tips
+
+Using tests tab of postman to set token variable to be used
+
+```JavaScript
+  //get token from response header  
+  var token = postman.getResponseHeader('x-auth')
+  postman.setEnvironmentVariable('x-auth', token)
+
+  //get id from response body
+  var body = JSON.parse(responseBody)
+  postman.setEnvironmentVariable("todoId",body._id)
+
+```
 
