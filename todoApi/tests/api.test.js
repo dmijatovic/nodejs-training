@@ -3,7 +3,7 @@ const request = require('supertest');
 
 const { api } = require('../api');
 const { ToDo, User } = require('../mongodb/models');
-const { populateTodos, users, populateUsers } = require('./seed');
+const { todos, populateTodos, users, populateUsers } = require('./seed');
 
 /**
  * Execute this code before each test
@@ -21,19 +21,12 @@ beforeEach((done)=>{
  * Test todos api route
  */
 describe('POST /todos',()=>{
-
-  it('should have 3 todo items in mongodb',(done)=>{
-    ToDo.find({}).then((todos)=>{
-      expect(todos.length).toBe(3);
-      //console.log(todos);
-      done();
-    });
-  });
-
+  
   it('should create new todo', (done)=>{
     let txt = "Test todo";
     request(api)
       .post('/todos')
+      .set('x-auth', users[0].tokens[0].token)
       .send({"text": txt})
       .expect(200)
       .expect((resp)=>{
@@ -51,6 +44,7 @@ describe('POST /todos',()=>{
   it('should FAIL when NULL STRING provided in text',(done)=>{
     request(api)
       .post('/todos')
+      .set('x-auth', users[0].tokens[0].token)
       .send({"text":""})
       .expect(400)
       .end((err,resp)=>{
@@ -65,6 +59,7 @@ describe('POST /todos',()=>{
   it('should FAIL when EMPTY OBJECT provided',(done)=>{
     request(api)
       .post('/todos')
+      .set('x-auth', users[0].tokens[0].token)
       .send({})
       .expect(400)
       .end((err,resp)=>{
@@ -81,6 +76,7 @@ describe("GET /todos",()=>{
   it('should return 200 OK',(done)=>{
     request(api)
       .get('/todos')
+      .set('x-auth', users[0].tokens[0].token)
       .expect(200)
       .end((err,resp)=>{
         if (err){
@@ -93,8 +89,9 @@ describe("GET /todos",()=>{
   it('should get 3 test todos',(done)=>{
     request(api)
       .get('/todos')
+      .set('x-auth', users[0].tokens[0].token)
       .expect((resp)=>{
-        expect(resp.body.data.length).toBe(3);
+        expect(resp.body.data.length).toBe(2);
       })
       .end((err,resp)=>{
         if (err){
@@ -112,6 +109,7 @@ describe("GET /todos/:id",()=>{
     //done();
     request(api)
       .get('/todos/12345')
+      .set('x-auth', users[0].tokens[0].token)
       .expect(404)
       .end((err,resp)=>{
         if(err){
@@ -123,22 +121,37 @@ describe("GET /todos/:id",()=>{
   });
 
   it ('should return todo data when valid id provided',(done)=>{
-    ToDo.findOne().then((data)=>{
-      var id = data._id;
-      request(api)
-      .get(`/todos/${id}`)
-      .expect(200)
-      .expect((resp)=>{
-        //console.log(resp.body);
-        expect(resp.body.data.text).toBe(data.text);
-      })
-      .end((err,resp)=>{
-        if(err){
-          done(err);
-        }else{
-          done();
-        }
-      });
+    var id = todos[0]._id;
+    request(api)
+    .get(`/todos/${id}`)
+    .set('x-auth', users[0].tokens[0].token)
+    .expect(200)
+    .expect((resp)=>{
+      //console.log(resp.body);
+      expect(resp.body.data.text).toBe(todos[0].text);
+    })
+    .end((err,resp)=>{
+      if(err){
+        done(err);
+      }else{
+        done();
+      }
+    });
+  });
+
+
+  it ('should NOT return todo from different user',(done)=>{
+    var id = todos[2]._id;
+    request(api)
+    .get(`/todos/${id}`)
+    .set('x-auth', users[0].tokens[0].token)
+    .expect(404)
+    .end((err,resp)=>{
+      if(err){
+        done(err);
+      }else{
+        done();
+      }
     });
   });
 
@@ -151,6 +164,7 @@ describe("DELETE /todos/:id",()=>{
     //done();
     request(api)
       .delete('/todos/12345')
+      .set('x-auth', users[0].tokens[0].token)
       .expect(404)
       .end((err,resp)=>{
         if(err){
@@ -166,6 +180,7 @@ describe("DELETE /todos/:id",()=>{
       var id = data._id;
       request(api)
       .delete(`/todos/${id}`)
+      .set('x-auth', users[0].tokens[0].token)
       .expect(200)
       .expect((resp)=>{
         //console.log(resp.body);
@@ -189,6 +204,7 @@ describe("PATCH /todos/:id",()=>{
     //done();
     request(api)
       .patch('/todos/12345')
+      .set('x-auth', users[0].tokens[0].token)
       .expect(404)
       .end((err,resp)=>{
         if(err){
@@ -207,6 +223,7 @@ describe("PATCH /todos/:id",()=>{
       var id = data._id;
       request(api)
       .patch(`/todos/${id}`)
+      .set('x-auth', users[0].tokens[0].token)
       .send(body)
       .expect(200)
       .expect((resp)=>{

@@ -20,6 +20,10 @@ const ToDo = mongoose.model('ToDo',{
   completedAt:{
     type: Number,
     default: null
+  },
+  creator:{
+    required: true,
+    type: mongoose.Schema.Types.ObjectId 
   }
 });
 

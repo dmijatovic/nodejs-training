@@ -1,15 +1,20 @@
 
 const { ToDo, User } = require('../mongodb/models');
-const {ObjectID} = require('mongodb');
+const { ObjectID } = require('mongodb');
 const jwt = require('jsonwebtoken');
 const secret = require('../middleware/.secret');
 const bcrypt = require('bcryptjs');
+
+//user ids
+const id1 = new ObjectID();
+const id2 = new ObjectID();
+
 //---------------------------------
 // TODOS
 const todos=[
-  {text: "First test todo"},
-  {text: "Second test todo"},
-  {text: "Third test todo"}
+  {_id: new ObjectID(), text: "First test todo", creator: id1},
+  {_id: new ObjectID(), text: "Second test todo", creator: id1},
+  {_id: new ObjectID(), text: "Third test todo", creator: id2}
 ]
 
 const populateTodos = (done)=>{
@@ -25,8 +30,6 @@ const populateTodos = (done)=>{
 
 //---------------------------------
 //USERS
-const id1 = new ObjectID();
-const id2 = new ObjectID();
 
 const users=[{
   _id: id1,
@@ -55,6 +58,6 @@ const populateUsers = (done)=>{
 
 
 module.exports = {
-  populateTodos,
+  todos, populateTodos,
   users, populateUsers
 };

@@ -30,10 +30,11 @@ api.get('/',(req,res)=>{
 });
 
 //set post todos route
-api.post('/todos',(req,res)=>{
+api.post('/todos',auth ,(req,res)=>{
   //console.log("/todos...",req.body);
   let todo = new ToDo({
-    text: req.body['text']
+    text: req.body['text'],
+    creator: req.user._id
   });
   //save todo to mongodb
   todo.save().then((d)=>{
@@ -44,8 +45,11 @@ api.post('/todos',(req,res)=>{
 });
 
 //get all todos
-api.get('/todos',(req,res)=>{
-  ToDo.find({}).then((todos)=>{
+api.get('/todos',auth, (req,res)=>{
+  //find all todos from specific owner
+  ToDo.find({
+    creator: req.user._id
+  }).then((todos)=>{
     res.send({
       data:todos
     });
@@ -55,11 +59,16 @@ api.get('/todos',(req,res)=>{
 });
 
 //get todo by id
-api.get('/todos/:id', (req, res)=>{
+api.get('/todos/:id', auth, (req, res)=>{
   //get id from params
   let id = req.params.id;
   if (ObjectID.isValid(id)){
-    ToDo.findById(id).then((todo)=>{
+    debugger 
+    ToDo.findOne({
+      _id: id,
+      creator: req.user._id
+    }).then((todo)=>{
+      debugger 
       if(todo){
         res.send({
           data: todo
@@ -71,6 +80,7 @@ api.get('/todos/:id', (req, res)=>{
       }
     });
   }else{
+    debugger 
     res.status(404).send({
       error:"Id not valid"
     });
@@ -78,11 +88,14 @@ api.get('/todos/:id', (req, res)=>{
 });
 
 //delete todo by id
-api.delete('/todos/:id',(req,res)=>{
+api.delete('/todos/:id',auth, (req,res)=>{
    //get id from params
   let id = req.params.id;
   if (ObjectID.isValid(id)){
-    ToDo.findByIdAndRemove(id).then((todo)=>{
+    ToDo.findOneAndRemove({
+      _id: id,
+      creator: req.user._id
+    }).then((todo)=>{
       if(todo){
         res.send({
           data: todo
@@ -101,7 +114,7 @@ api.delete('/todos/:id',(req,res)=>{
 });
 
 //update todo
-api.patch('/todos/:id',(req,res)=>{
+api.patch('/todos/:id',auth, (req,res)=>{
   let id = req.params.id,
     body = {
       completed: req.body['completed'] || false,
