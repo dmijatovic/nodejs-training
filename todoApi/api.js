@@ -1,17 +1,7 @@
-//get environment variables
-let env = process.env.NODE_ENV || 'development';
+//load configuration
+require('./config/config');
 
-//set environements 
-if (env==='development'){
-  //development environement with local mongodb
-  process.env.PORT = 3000;
-  process.env.MONGODB_URI = "mongodb://localhost:27017/TodoApp";
-}else if (env==='test'){
-  //test environement using mongodb test collection
-  process.env.PORT = 3000;
-  process.env.MONGODB_URI = "mongodb://localhost:27017/TodoAppTest";
-}
-
+//load dependencies
 const express = require ('express');
 const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
@@ -24,11 +14,13 @@ let api = express();
 //use body parser middleware
 api.use(bodyParser.json());
 
+//------------------------------------
 //set root route
 api.get('/',(req,res)=>{
   res.send("It works");
 });
 
+//------------------------------------
 //set post todos route
 api.post('/todos',auth ,(req,res)=>{
   //console.log("/todos...",req.body);

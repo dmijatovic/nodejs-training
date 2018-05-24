@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const secret= require('../middleware/.secret');
+const secret = require('../middleware/.secret');
 
 //mongoose todo model
 const ToDo = mongoose.model('ToDo',{

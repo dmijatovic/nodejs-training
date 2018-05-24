@@ -109,3 +109,41 @@ All test are in tests folder. To test follwing libs are used:
 - [expect](https://github.com/mjackson/expect): for assertions
 - [supertest](https://www.npmjs.com/package/supertest): for making requests
 
+
+# Configuration setup
+
+In the config folder we have config.js and config.json. Config.json contains environment variables and is NOT included in the repo. In order for app to work, create config.json and add props stated below. Ensure env variable of mongodb corespond to your setup.
+
+
+``` json
+{
+  "test":{
+    "PORT": 3000,
+    "MONGODB_URI": "mongodb://localhost:27017/TodoAppTest",
+    "JWT_SECRET": "asdqwJFNLKDMAKMD1323422ksdfsdvsz12323sz"
+  },
+  "development":{
+    "PORT": 3000,
+    "MONGODB_URI": "mongodb://localhost:27017/TodoApp",
+    "JWT_SECRET": "123123123sdfsdfplkINwuebbsddcs236bf"
+  }
+}
+
+``` 
+
+## Heroku env variables
+
+These are Heroku specific config variables. Can be used for setting up JWT_SECRET etc.
+When deploying on Heroku one should set JWT_SECRET variable to let this api working properly.
+
+```bash
+  # set env variable on heroku
+  heroku config:set NAME = "your value here"
+  # view config variables
+  heroku config
+  # remove variable
+  heroku config:unset NAME
+
+```
+
+
