@@ -175,8 +175,39 @@ api.get('/users/me', auth, (req,res)=>{
   //using auth middleware we extract user 
   //and append it to request in user prop
   //we also append token property
-  res.send(req.user);
+  res.send({data: req.user });
 });
+
+// LOGIN point
+api.post('/login',(req,res)=>{
+  let body = {
+    email: req.body.email,
+    password: req.body.password
+  }, userFound;
+  debugger
+  //find user by credentials
+  User.findByCredentials(body)
+  .then((user)=>{
+    userFound = user;
+    //if user found - generate token
+    return user.generateAuthToken();
+  })
+  .then((token)=>{
+    //send response with token
+    res.header('x-auth', token)
+    .send({
+      data: userFound,
+      token: token
+    });
+  })
+  .catch((e)=>{
+    res.status(501).send({
+      error: "Failed to log you in",
+      data: e
+    })
+  });
+});
+
 
 api.listen(3000,()=>{
   console.log("Started on 3000");

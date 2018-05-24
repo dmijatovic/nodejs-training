@@ -2,22 +2,19 @@ const expect = require('expect');
 const request = require('supertest');
 
 const { api } = require('../api');
-const { ToDo } = require('../mongodb/models');
-const todos = require('./todos');
+const { ToDo, User } = require('../mongodb/models');
+const { populateTodos, users, populateUsers } = require('./seed');
 
 /**
  * Execute this code before each test
  * we remove all todo items from mongodb
- * before each test
+ * before each test and add 3 dummies
  */
 beforeEach((done)=>{
-  //remove all records
-  ToDo.remove({})
-    .then(()=>{
-      //insert dummy todos
-      return ToDo.insertMany(todos)
-    })
-    .then(()=>done());
+  populateTodos(done)
+});
+beforeEach((done)=>{
+  populateUsers(done)
 });
 
 /**
@@ -228,3 +225,127 @@ describe("PATCH /todos/:id",()=>{
     });
   });
 });
+
+
+describe("GET /users/me",()=>{
+  it ('should return authenticated user when valid x-auth token provided',(done)=>{
+    request(api)
+      .get('/users/me')
+      .set('x-auth', users[0].tokens[0].token)
+      .expect(200)
+      .expect((resp)=>{
+        //check user email matches
+        expect(resp.body.data.email).toBe(users[0].email)
+      })
+      .end((err,resp)=>{
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      })
+  });
+
+  it ('should return 401 when x-auth token NOT provided',(done)=>{
+    request(api)
+      .get('/users/me')
+      //.set('x-auth', users[0].tokens[0].token)
+      .expect(401)
+      .end((err,resp)=>{
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      })
+  });
+
+  it ('should return 401 when INCORRECT x-auth token provided',(done)=>{
+    request(api)
+      .get('/users/me')
+      .set('x-auth', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
+      .expect(401)
+      .end((err,resp)=>{
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      })
+  });
+});
+
+
+
+describe('POST /users',()=>{
+  
+  let email="email@google.com", pass="123password";
+
+  it ('should create a user and return x-auth token in the header', 
+    (done)=>{
+      
+    request(api)
+      .post('/users')
+      .send({email: email, password: pass})
+      .expect(200)
+      .expect((resp)=>{
+        //console.log(resp.headers);
+        expect(resp.headers['x-auth']).toBeTruthy();
+      })
+      .end((err,resp)=>{
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      })
+  });
+
+  it ('should save hashed password in database (not provided one)', (done)=>{
+      
+    request(api)
+      .post('/users')
+      .send({email: email, password: pass})
+      .expect(200)
+      .end((err)=>{
+        if(err){
+          done(err);
+        }else{
+          User.findOne({email: email})
+          .then((user)=>{
+            //console.log(user.password);
+            expect(user.password).not.toBe(pass);
+            done();
+          });
+        }
+      })
+  });
+
+  it('should return 500 error when PASSWORD not provided',(done)=>{
+    request(api)
+      .post('/users')
+      .send({email: email, password:''})
+      .expect(500)
+      .end((err,resp)=>{
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      })
+  })
+
+  it('should return 500 error when EMAIL already used',(done)=>{
+    request(api)
+      .post('/users')
+      .send({email: users[0].email, password:'1234sdsd'})
+      .expect(500)
+      .end((err,resp)=>{
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      })
+  })
+})

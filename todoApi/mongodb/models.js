@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const secret="abc123";
+const secret= require('../middleware/.secret');
 
 //mongoose todo model
 const ToDo = mongoose.model('ToDo',{
@@ -49,7 +49,7 @@ const UserSchema = new mongoose.Schema({
     },
     password:{
       type: String,
-      require: true,
+      required: true,
       minlength: 6
     },
     tokens:[{
@@ -106,6 +106,35 @@ UserSchema.statics.findByToken = function(token){
     }
   });
 }
+// find user by token
+UserSchema.statics.findByCredentials = function({email, password}){
+  let User = this;
+  //debugger
+  return new Promise((res,rej)=>{
+    //find user with that email
+    User.findOne({email: email})
+    .then((user)=>{
+      if (user){
+        bcrypt.compare(password, user.password, (err, resp)=>{
+          if (resp){
+            res(user);
+          }else{
+            rej("Password incorrect")
+          }
+        });
+      }else{
+        //reject when user not found
+        rej("User not found!");
+      }
+    })
+    .catch((e)=>{
+      //reject with error
+      //mostly invalid token from jwt.verify
+      rej(e);
+      //return null;
+    })
+  });
+}
 
 //use middleware to hash password before saving
 //we use function keywoard to have reference to this
@@ -146,7 +175,7 @@ UserSchema.methods.toJSON = function(){
   return {
     _id: user._id,
     email: user.email,
-    password: user.password
+    //password: user.password
   }
 }
 

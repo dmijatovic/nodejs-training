@@ -103,5 +103,9 @@ Saving hashed password is done using [mongoose middleware](http://mongoosejs.com
 See User model UserSchema.pre('save',...)
 
 
+# Testing
+All test are in tests folder. To test follwing libs are used:
 
+- [expect](https://github.com/mjackson/expect): for assertions
+- [supertest](https://www.npmjs.com/package/supertest): for making requests
 
