@@ -86,6 +86,22 @@ SHA256 used from lib crypto-js module. See example in playground/hashing.js
 ### JWT
 Using jwt for validation `npm i --save jsonwentoken
 
-### Private routes with Express & middleware
+### Private routes with Express using custom middleware
+See middleware/authenticate.js for the code.
+
+Folowing steps implemented:
+ - custom method `generateAuthToken` created in mongodb User schema. jsonwebtoken lib is used to create JWT
+ - custom static method `findByToken` created in mongodb User schema. jsonwebtoken lib is used to verify received token
+ - toJSON default method om user schema is overwritten to limit properties send back to front-end.
+ - authenticate middleware function created to authenticate and append user and token objects to request. So the info is passed further as props user and token of request.
+
+### Saving encripted passwords with bcryptjs
+
+The passwords are saved hased using [bcryptjs](https://www.npmjs.com/package/bcryptjs)
+
+Saving hashed password is done using [mongoose middleware](http://mongoosejs.com/docs/middleware.html) 
+See User model UserSchema.pre('save',...)
+
+
 
 
