@@ -150,19 +150,23 @@ api.post('/users',(req,res)=>{
     email: req.body.email,
     password: req.body.password,
   }
-  debugger 
+  //debugger 
   let user = new User(body);
-  user.save().then((data)=>{
-    debugger 
-    res.send({
-      data: data
-    })
-  },(err)=>{
+  user.save().then(()=>{
+    //generate token
+    return user.generateAuthToken();
+  }).then((token)=>{
+    //debugger 
+    res.header('x-auth', token)
+    .send({
+      data: user,
+      token: token
+    });
+  }).catch((err)=>{
     res.status(500).send({
       error: "Failed to create user: " + err
     });
   });
-
 });
 
 
