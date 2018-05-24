@@ -3,6 +3,7 @@ const { ToDo, User } = require('../mongodb/models');
 const {ObjectID} = require('mongodb');
 const jwt = require('jsonwebtoken');
 const secret = require('../middleware/.secret');
+const bcrypt = require('bcryptjs');
 //---------------------------------
 // TODOS
 const todos=[
@@ -43,7 +44,11 @@ const users=[{
 const populateUsers = (done)=>{
   User.remove({})
   .then(()=>{
-    return User.insertMany(users);
+    users.map((item)=>{
+      let user = new User(item)
+      return user.save()
+    })
+    //return User.insertMany(users);
   })
   .then(()=>done());
 }

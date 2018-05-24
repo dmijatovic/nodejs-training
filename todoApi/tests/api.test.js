@@ -349,3 +349,84 @@ describe('POST /users',()=>{
       })
   })
 })
+
+describe('POST /login',()=>{
+  //let user = users[0];
+  it('should provide x-auth token on login',(done)=>{
+    request(api)
+      .post("/login")
+      .send({ email: users[0].email, password: users[0].password })
+      .expect(200)
+      .expect((resp)=>{
+        expect(resp.headers['x-auth']).toBeTruthy();
+      })
+      .end((err,resp)=>{
+        //console.log(resp)
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      })
+  });
+
+  it('should NOT provide x-auth token on INCORRECT login',(done)=>{
+    request(api)
+      .post("/login")
+      .send({ email: users[0].email, password: users[0].password + "aaa"})
+      .expect(500)
+      .expect((resp)=>{
+        expect(resp.headers['x-auth']).toBeFalsy();
+      })
+      .end((err,resp)=>{
+        //console.log(resp)
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      })
+  });
+
+
+});
+
+
+describe('DELETE /logout',()=>{
+
+  it ('should return 401 if not logged in',(done)=>{
+    request(api)
+      .delete("/logout")
+      .expect(401)
+      .end((err,resp)=>{
+        //console.log(resp)
+        if(err){
+          done(err);
+        }else{
+          done();
+        }
+      })
+  });
+
+  it ('should return 200 and remove token on successful logout',(done)=>{
+    request(api)
+      .delete("/logout")
+      .set('x-auth', users[0].tokens[0].token)
+      .expect(200)
+      .end((err)=>{
+        //console.log(resp)
+        if(err){
+          done(err);
+        }else{
+          User.findOne({email: users[0].email}).then((user)=>{
+            expect(user.tokens.length).toBe(0);;
+            done();
+          })
+          .catch((e)=>{
+            done(e);
+          })          
+        }
+      })
+  })
+
+});

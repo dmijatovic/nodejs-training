@@ -201,7 +201,7 @@ api.post('/login',(req,res)=>{
     });
   })
   .catch((e)=>{
-    res.status(501).send({
+    res.status(500).send({
       error: "Failed to log you in",
       data: e
     })
