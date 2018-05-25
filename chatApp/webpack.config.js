@@ -3,9 +3,12 @@ const path = require('path');
 
 module.exports = {
   mode:'development',
-  entry: './src/index.js',
+  entry: {
+    index: './src/index.js',
+    styles: './src/index.scss'
+  },
   output: {
-    filename: 'index.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'public')
   }
 };

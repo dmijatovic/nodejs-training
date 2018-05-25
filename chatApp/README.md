@@ -21,3 +21,13 @@ ChatMASTER app is node.js and [socket.io](https://socket.io/docs/) app.
 
 Acknowledgment, via callback. For validating data
 
+
+## [Parcel](https://parceljs.org/getting_started.html) file bundler
+
+This is new, fast and easy to use bundler. As backup we have webpack installed but we will test this bundler. Generally, parcel is simple but also limited in options.
+
+
+
+
+
+

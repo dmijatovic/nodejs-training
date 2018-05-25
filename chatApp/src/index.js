@@ -3,6 +3,11 @@
  * 
  * v0.0.1 May 2018
  */
+
+//import main styles file
+//import './index.scss';
+
+//import main chat class
 import { chatMaster } from './chatMaster';
 
 //create new chatMASTER object
@@ -12,14 +17,4 @@ let chat = new chatMaster({
   submitId: 'submit-chat',
   msgLstId: 'message-list'
 });
-
-/*
-//create new message
-chat.createMessage({
-  from:'Me',
-  body: "This is my auto message"
-});
-*/
-//chat.submit()
-
 

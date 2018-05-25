@@ -3,6 +3,9 @@
  * 
  * v.0.0.1 mei 2018
  */
+
+import io from 'socket.io-client';
+
 export class chatMaster{
   //socket = io();
   constructor({inputId, submitId, msgLstId}){
@@ -75,8 +78,16 @@ export class chatMaster{
    */
   appendMessageToList(data){
     //debugger
-    let li = document.createElement('li');
-    li.innerHTML = JSON.stringify(data);
+    let li = document.createElement('li'),
+      html=`
+        <div class="received-msg-body">
+          <span>${new Date(data.createdAt).toLocaleTimeString()}</span> -  
+          <span>${data.from}</span>: 
+          <span>${data.body}</span>
+        </div>
+      `;
+    li.className="message-item";
+    li.innerHTML = html;
     this.msgLst.appendChild(li);
   }
   submit(){
