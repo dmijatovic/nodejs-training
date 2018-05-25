@@ -2,7 +2,8 @@ const webpack = require('webpack');
 const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 /*
  * We've enabled UglifyJSPlugin for you! This minifies your app
  * in order to load faster and run less javascript.
@@ -12,66 +13,6 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 //const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
-module.exports = {
-	mode: 'development',
-	entry:{		
-		index: './src/index.js'
-	},
-	output: {
-		filename: '[name].js',
-		chunkFilename: '[name].js',
-		path: path.resolve(__dirname, 'public')
-	},
-	module: {
-		rules: [{
-			test: /\.js$/,
-			exclude: /node_modules/,
-			loader: 'babel-loader',
-			options: {
-				presets: ['env']
-			}
-		},{
-			test: /\.(scss|css)$/,
-			use: [/*{
-					loader: 'style-loader'
-				}*/
-				//extract css into separate file
-				MiniCssExtractPlugin.loader,
-				{
-					loader: 'css-loader'
-				},{
-					loader: 'sass-loader'
-			}]
-		}]
-	},
-
-	plugins: [
-		//copy index html
-		//https://webpack.js.org/plugins/html-webpack-plugin/
-		new HtmlWebpackPlugin({
-			template: './src/index.html'
-		}),
-		//old extract text plugin to extract css
-		//new ExtractTextPlugin('[name].css')		
-		new MiniCssExtractPlugin({
-      // Options similar to webpackOptions.output
-      // both options are optional
-      filename: "[name].css",
-     	chunkFilename: "[id].css"
-		}),
-		//copy assets
-		//https://webpack.js.org/plugins/copy-webpack-plugin/
-		new CopyWebpackPlugin([			
-			/*{ //copy all files from img folder
-				from: './src/img/',
-				to: 'img',
-				toType: 'dir'
-			}*/
-			//copy all files from img dir to root
-			'./src/img/'
-		])
-	],
 /*
  * SplitChunksPlugin is enabled by default and replaced
  * deprecated CommonsChunkPlugin. It automatically identifies modules which
@@ -84,6 +25,66 @@ module.exports = {
  * https://webpack.js.org/plugins/split-chunks-plugin/
  *
  */
+module.exports = {
+	mode: 'production',
+	entry:{		
+		index: './src/index.js'
+	},
+	output: {
+		filename: '[name].[chunkhash].js',
+		chunkFilename: '[name].[chunkhash].js',
+		path: path.resolve(__dirname, 'dist')
+	},
+	module: {
+		rules: [{
+			test: /\.js$/,
+			exclude: /node_modules/,
+			loader: 'babel-loader',
+			options: {
+				presets: ['env']
+			}
+		},{
+			test: /\.(scss|css)$/,
+			use: [
+				//extract css into separate file
+				MiniCssExtractPlugin.loader,
+				{
+					loader: 'css-loader',
+					options:{
+						minimize: true
+					}
+				},{
+					loader: 'sass-loader'
+			}]
+		}]
+	},
+
+	plugins: [
+		//remove all files from dist folder on each build
+		new CleanWebpackPlugin(['dist/*.*']),		
+		//copy index html
+		//https://webpack.js.org/plugins/html-webpack-plugin/
+		new HtmlWebpackPlugin({
+			template: './src/index.html'
+		}),
+		//extract css to separate file
+		//https://webpack.js.org/plugins/mini-css-extract-plugin/
+		new MiniCssExtractPlugin({
+      // Options similar to webpackOptions.output
+      // both options are optional
+      filename: "[name].[chunkhash].css",
+     	chunkFilename: "[id].[chunkhash].css"
+		}),
+		//copy assets
+		//https://webpack.js.org/plugins/copy-webpack-plugin/
+		new CopyWebpackPlugin([						
+			//copy all files from img dir to root
+			'./src/img/'
+		]),
+		//uglify js
+		new UglifyJSPlugin()
+	],
+
 	optimization: {
 		splitChunks: {
 			chunks: 'async',

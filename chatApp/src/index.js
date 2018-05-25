@@ -5,7 +5,7 @@
  */
 
 //import main styles file
-//import './index.scss';
+import './index.scss';
 
 //import main chat class
 import { chatMaster } from './chatMaster';

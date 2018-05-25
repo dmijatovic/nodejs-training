@@ -39,7 +39,6 @@ io.on('connection',(socket)=>{
     })
   );
 
-
   socket.on('createMessage',(data, callback)=>{
 
     console.log("Share message...", data);

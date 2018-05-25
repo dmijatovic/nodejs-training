@@ -4,13 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>ChatMASTER</title>
-
-  <!-- included scss file for parcel to use 
-    it generates css file with random name
-    and replaces href value
-  -->
-  <link rel="stylesheet" href="index.scss" />
+  <link rel="icon" href="chat.ico" type="image/x-icon"/>
+  <title>ChatMASTER</title>  
 </head>
 <body>
   <header>
@@ -24,14 +19,7 @@
       id="chat-body" 
       defaultValue=""
       value="">
-    </textarea>
-
-    <div class="mdc-text-field text-field mdc-text-field--textarea mdc-text-field--upgraded">
-      <textarea id="text-field--textarea" class="mdc-text-field__input"></textarea>
-      <label class="mdc-floating-label" for="text-field--textarea">Standard</label>
-      <div class="mdc-line-ripple" style="transform-origin: 202.5px center 0px;"></div>
-    </div>
-    
+    </textarea>    
   </div>
   <div class="message-nav">
     <button id="submit-chat" class="mdc-button">
@@ -44,12 +32,6 @@
     <ol id="message-list">
     </ol>
   </section>
-
-<!--included js file for parcel to use 
-    it generates js file with random name
-    and replaces href value
--->
-<script src="index.js"></script>
 
 </body>
 </html>

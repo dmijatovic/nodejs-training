@@ -26,8 +26,5 @@ Acknowledgment, via callback. For validating data
 
 This is new, fast and easy to use bundler. As backup we have webpack installed but we will test this bundler. Generally, parcel is simple but also limited in options.
 
-
-
-
-
+## Webpack
 

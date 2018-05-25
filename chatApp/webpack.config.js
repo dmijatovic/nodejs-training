@@ -1,14 +1,10 @@
 
-const path = require('path');
+// environments defined
+let config = {
+  dev: require('./webpack.dev'),
+  prod: require('./webpack.prod')
+};
 
-module.exports = {
-  mode:'development',
-  entry: {
-    index: './src/index.js',
-    styles: './src/index.scss'
-  },
-  output: {
-    filename: '[name].js',
-    path: path.resolve(__dirname, 'public')
-  }
+module.exports = (env) =>{
+  return config[env];
 };
