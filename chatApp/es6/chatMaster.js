@@ -96,7 +96,7 @@ export class chatMaster{
       from: 'Me',
       body: this.messageBody.value
     }
-    debugger
+    //debugger
     this.createMessage(msg); 
   }
   disconnect(){

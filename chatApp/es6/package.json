@@ -1,18 +1,14 @@
 {
-  "name": "chatApp",
+  "name": "chat-app-es6",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server/app.js",
-    "es6": "webpack --watch --env=dev --config=./src/es6/webpack.dev.js",
-    "dev": "webpack-dev-server --env=dev",
+    "start": "webpack --env=dev",
+    "dev": "webpack --watch --env=dev",
+    "dev-server": "webpack-dev-server --env=dev",
     "build-dev": "webpack --env=dev",
     "build-prod": "webpack --enc=prod",
-    "parcel": "parcel watch src/index.html -d public",
-    "server": "nodemon server/app.js",
-    "debug": "nodemon --inspect-brk server/app.js",
-    "build": "webpack",
     "test": "mocha server/**/*.test.js",
     "test:watch": "nodemon --exec 'npm test'"
   },
@@ -31,9 +27,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.3",
-    "socket.io": "^2.1.1",
-    "vue": "^2.5.16"
+    "bootstrap": "^4.1.1",
+    "jquery": "^3.3.1",
+    "popper": "^1.0.1",
+    "popper.js": "^1.14.3",
+    "socket.io": "^2.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

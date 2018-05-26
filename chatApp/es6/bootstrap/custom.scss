@@ -1,0 +1,27 @@
+/* SASS bootastrap customizes
+  see https://getbootstrap.com/docs/4.1/getting-started/theming/
+*/
+
+// Custom.scss
+// Option B: Include parts of Bootstrap
+
+// Required
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+
+//variable overwrites
+@import './variables';
+
+//bootstrap options
+@import './options';
+
+
+
+
+
+
+
+
+

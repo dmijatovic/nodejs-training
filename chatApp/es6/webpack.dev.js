@@ -16,12 +16,12 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
 	mode: 'development',
 	entry:{		
-		index: './src/index.js'
+		index: './index.js'
 	},
 	output: {
 		filename: '[name].js',
 		chunkFilename: '[name].js',
-		path: path.resolve(__dirname, 'public')
+		path: path.resolve(__dirname, '../public')
 	},
 	module: {
 		rules: [{
@@ -47,10 +47,18 @@ module.exports = {
 	},
 
 	plugins: [
+		/*
+		new webpack.ProvidePlugin({
+			'$': "jquery",
+			'jQuery': "jquery",
+			'Popper': 'popper.js'
+		}),*/
 		//copy index html
 		//https://webpack.js.org/plugins/html-webpack-plugin/
 		new HtmlWebpackPlugin({
-			template: './src/index.html'
+			filename: 'index.html',
+      template: 'index.html',
+      inject: true
 		}),
 		//old extract text plugin to extract css
 		//new ExtractTextPlugin('[name].css')		
@@ -69,7 +77,7 @@ module.exports = {
 				toType: 'dir'
 			}*/
 			//copy all files from img dir to root
-			'./src/img/'
+			'../assets/img/'
 		])
 	],
 /*
