@@ -8,29 +8,10 @@
   <title>ChatMASTER</title>  
 </head>
 <body>
-  <header>
-    <h1>Chat MASTER</h1>
-  </header>
   
-  <p> Welcome to chatMASTER! </p>
 
-  <div class="message-body">
-    <textarea rows="4" cols="50"
-      id="chat-body" 
-      defaultValue=""
-      value="">
-    </textarea>    
-  </div>
-  <div class="message-nav">
-    <button id="submit-chat" class="mdc-button">
-      <i class="material-icons mdc-button__icon" aria-hidden="true">favorite</i>
-      Send
-    </button>
-  </div>
-
-  <section class="messages-area">
-    <ol id="message-list">
-    </ol>
+  <section id="vue-app">    
+    {{ message }}
   </section>
 
 </body>
