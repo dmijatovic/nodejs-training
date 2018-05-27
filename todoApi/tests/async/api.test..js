@@ -3,7 +3,7 @@ const request = require('supertest');
 
 const { api } = require('../api-async');
 const { ToDo, User } = require('../mongodb/models');
-const { todos, populateTodos, users, populateUsers } = require('./seed');
+const { todos, populateTodos, users, populateUsers } = require('../seed');
 
 /**
  * Execute this code before each test
@@ -20,7 +20,7 @@ beforeEach((done)=>{
 /**
  * Test todos api route
  */
-describe('POST /todos',()=>{
+describe('ASYNC POST /todos',()=>{
   
   it('should create new todo', (done)=>{
     let txt = "Test todo";
