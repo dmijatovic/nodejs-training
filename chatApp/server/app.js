@@ -24,14 +24,15 @@ io.on('connection',(socket)=>{
 
   console.log("Client...connected");
 
-  //great new user
+  //greet new user after connected
   socket.emit("newMessage",
     utils.generateMessage({
       from:'admin@chatMaster.com',
       body:'Welcome to chatMASTER'
     })
   );
-
+  //send notification to everyone (except user)
+  //about new user joining
   socket.broadcast.emit("newMessage",
     utils.generateMessage({
     from: 'admin@chatMASTER.com',
@@ -39,19 +40,30 @@ io.on('connection',(socket)=>{
     })
   );
 
+  //listen when client request to create new message
+  //server shares this message with everyone (incl. sender)
   socket.on('createMessage',(data, callback)=>{
-
     console.log("Share message...", data);
     
     //create message with dateTimeStamp
-    let message=utils.generateMessage(data)
-
+    let message = utils.generateMessage(data)
+    //send message if all went well
     callback({status:200, message:'Thi is completely OK!'});
     //emit message to all clients;
     io.emit('newMessage', message);
-    
     //emit message to everybody except the owner
     //socket.broadcast.emit('newMessage',message);
+  });
+
+  //listen when client requests location message
+  socket.on('createLocationMsg',(geoloc, callback)=>{
+    console.log("createLocatoinMsg...", geoloc);
+    //create message with dateTimeStamp
+    let message = utils.generateMessage(geoloc)
+    //send message if all went well
+    callback({status:200, message:'Thi is completely OK!'});
+    //emit message to all clients;
+    io.emit('newMessage', message);
   });
 
 
@@ -60,7 +72,6 @@ io.on('connection',(socket)=>{
   });
 
 });
-
 
 
 server.listen(PORT,()=>{

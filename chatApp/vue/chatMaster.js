@@ -11,7 +11,7 @@ let chatMaster = new Vue({
   data:{
     titles:{
       app:"ChatMASTER",
-      conversation:"Your all messages"
+      conversation:"Your messages"
     },
     //socket.io object
     socket:{
@@ -26,9 +26,46 @@ let chatMaster = new Vue({
      * used for new messages
      */
     message:{
-      from: "Me",
-      body: "This is content",
+      from: "Dusan",
+      body: "",
+      location:{
+        lat:null,
+        lng:null
+      },
       createdAt: null //created by server
+    },
+    userName:"Dusan",
+    shareLocation:false,
+    /**
+     * Here we load notifications
+     */
+    notification:{
+      msg:"Welcome to chatMASTER!!!",
+      type:'alert-primary'
+    }
+  },
+  computed:{
+    /*
+    toggleLocation(){
+      //toggle location
+      this.shareLocation = !this.shareLocation;
+      console.log("Computed location...", this.shareLocation);
+      return this.shareLocation;
+    }*/
+  },
+  watch:{
+    /**
+     * Watch changes in shareLocation flag
+     * and add/remove location props to message
+     * @param val: boolean 
+     */
+    shareLocation(val){
+      //console.log("Watch...shareLocation...", val);
+      if (val){
+        this.setLocation();
+      }else{
+        this.removeLocation();
+      }
     }
   },
   methods:{
@@ -53,7 +90,7 @@ let chatMaster = new Vue({
 
       //listen for new message
       this.socket.io.on('newMessage',(data)=>{
-        //console.log("New message...",data)
+        console.log("New message...",data)
         this.appendMessage(data);
       });
     },
@@ -71,21 +108,94 @@ let chatMaster = new Vue({
       //console.log("Send message...")
       if (this.message.body.length > 0){
         //send message to server
+        //debugger
         this.socket.io.emit('createMessage',{
           from: this.message.from,
-          body: this.message.body
+          body: this.message.body,
+          location: this.message.location
         },(res)=>{
           //console.log("Got back from server...", err);
           if (res.status == 200){
             //remove message from input (body)
             this.message.body = '';
           }else{
-            console.error(res.status, " - ", res.message);
+            this.logServerResponse(res);
           }
         });
       }else{
         console.error("No message to create!")
       }
+    },
+    setLocation(){
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition((res,err)=>{
+          if(err){
+            console.error("Geolocation error...", err);
+            this.removeLocation();
+          }else{
+            //console.log("Georlocation...", res);
+            //debugger
+            this.message.location.lat = res.coords.latitude;
+            this.message.location.lng = res.coords.longitude;
+          }          
+        });
+      }else{
+        console.error("Geolocation support MISSING");
+        this.removeLocation();
+      }
+    },
+    /**
+     * Remove location from message
+     */
+    removeLocation(){
+      this.message.location.lat = null;
+      this.message.location.lng = null;
+    },
+    /* oldone
+    sendLocation(){
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition((res,err)=>{
+          if(err){
+            console.error("Geolocation error...", err);
+          }else{
+            //console.log("Georlocation...", res);
+            this.createLocationMsg(res);
+          }          
+        });
+      }else{
+        console.error("Geolocation support MISSING");
+      }
+    }, */
+    /**
+     * Send location to server to share with others
+     * @param geoloc: geolocation object provided by browser 
+     
+    createLocationMsg(geoloc){
+      this.socket.io.emit('createLocationMsg',{
+        from:"Dusan",
+        body: geoloc.latitude + "," + geoloc.longitude
+      },(res)=>{
+        if(res.status==200){
+          
+        }else{
+          this.logServerResponse(res); 
+        }
+      });
+    },*/
+    /**
+     * Function to scroll to bottom of the page?!?
+     */
+    scrollToBottom(){
+      let clientHeight = window.clientHeight();
+    },
+    /**
+     * Log response received from server 
+     * use mainly to log ERRORS
+     * @param res.status: number, 200 = OK
+     * @param res.message: string, error message 
+     */
+    logServerResponse(res){
+      console.error(res.status, " - ", res.message);
     }
   },
   /**

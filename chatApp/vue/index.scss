@@ -3,4 +3,23 @@
 
 
 
+.flex-row{
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-col{
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-col.center{
+  justify-content: center;
+}
+
+.flex-row.center{
+  align-items: center;
+}
+
+
 
