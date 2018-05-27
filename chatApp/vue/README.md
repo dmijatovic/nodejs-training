@@ -1,30 +1,26 @@
-# test1
 
-> A Vue.js project
+# chatMASTER Vue front-end
 
-## Build Setup
+ChatMASTER frontend app based on ES6 javascipt with webpack, bootstrap and vue.
 
-``` bash
-# install dependencies
-npm install
+Vue and bootstrap are added via CDN in this test.
 
-# serve with hot reload at localhost:8080
-npm run dev
+## Scripts
 
-# build for production with minification
-npm run build
+```bash
+  # run webpack using dev webpack setup
+  npm start
 
-# build for production and view the bundle analyzer report
-npm run build --report
+  # run webpack in watch mode
+  npm run dev
 
-# run unit tests
-npm run unit
+  # run server in debug mode
+  npm run build-dev
 
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## Socket.io
+
+Acknowledgment, via callback. For validating data
+
