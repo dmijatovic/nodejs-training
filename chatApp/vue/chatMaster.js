@@ -1,6 +1,18 @@
 
+import { appHeader } from './appHeader';
+import { appFooter } from './appFooter';
+import { userProfile } from './userProfile';
+
+//global components
+Vue.component('app-header',appHeader);
+Vue.component('app-footer',appFooter);
+
+
 let chatMaster = new Vue({
   el:'#chatMaster',
+  components:{
+    'user-profile': userProfile
+  },
   /**
    * After vue instance is created
    */
